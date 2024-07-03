@@ -24,70 +24,55 @@ router.post('/login', (req, res) => {
 
 
 //-------------------------------Add manager--------------//
-// router.post('/add_manager', (req, res) => {
-//     const sql = `INSERT INTO managers (manager_id,name,password,department) VALUES (?)`;
 
+// router.get('/manager', (req, res) => {
+//     const sql = "SELECT * FROM employees WHERE role = 'manager' "
+//     connect.query(sql, (err, result) => {
+//         if (err) return res.json({ Status: false, Error: "Query Error" })
+//         return res.json({ Status: true, Result: result })
+//     })
+// })
+
+// router.get('/manager/:id', (req, res) => {
+//     const id = req.params.id
+//     const sql = "SELECT * FROM employees WHERE id = ? and role = 'manager'"
+//     connect.query(sql, [id], (err, result) => {
+//         if (err) return res.json({ Status: false, Error: "Query Error" })
+//         return res.json({ Status: true, Result: result })
+//     })
+// })
+
+// router.put('/edit_manager/:id', (req, res) => {
+
+//     const id = req.params.id;
+//     const sql = `UPDATE employees set username=?, name=?, department=?, WHERE id = ?`;
 //     const values = [
 //         req.body.manager_id,
 //         req.body.name,
-//         req.body.password,
-//         req.body.department
-//     ];
+//         req.body.department,
+//     ]
+//     connect.query(sql, [...values, id], (err, result) => {
+//         if (err) return res.json({ Status: false, Error: "Query Error" + err })
+//         return res.json({ Status: true, Result: result })
+//     })
+// })
 
-//     connect.query(sql, [values], (err, result) => {
-//         if (err) return res.json({ Status: false, Error: "Query Error11" });
-//         return res.json({ Status: true });
-//     });
-// });
+// router.delete('/delete_manager/:id', (req, res) => {
+//     const id = req.params.id;
+//     const sql = "DELETE FROM employees WHERE id = ?"
+//     connect.query(sql, [id], (err, result) => {
+//         if (err) return res.json({ Status: false, Error: "Query Error" + err })
+//         return res.json({ Status: true, Result: result })
+//     })
+// })
 
-router.get('/manager', (req, res) => {
-    const sql = "SELECT * FROM employees WHERE role = 'manager' "
-    connect.query(sql, (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" })
-        return res.json({ Status: true, Result: result })
-    })
-})
-
-router.get('/manager/:id', (req, res) => {
-    const id = req.params.id
-    const sql = "SELECT * FROM employees WHERE id = ? and role = 'manager'"
-    connect.query(sql, [id], (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" })
-        return res.json({ Status: true, Result: result })
-    })
-})
-
-router.put('/edit_manager/:id', (req, res) => {
-
-    const id = req.params.id;
-    const sql = `UPDATE employees set username=?, name=?, department=?, WHERE id = ?`;
-    const values = [
-        req.body.manager_id,
-        req.body.name,
-        req.body.department,
-    ]
-    connect.query(sql, [...values, id], (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" + err })
-        return res.json({ Status: true, Result: result })
-    })
-})
-
-router.delete('/delete_manager/:id', (req, res) => {
-    const id = req.params.id;
-    const sql = "DELETE FROM employees WHERE id = ?"
-    connect.query(sql, [id], (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" + err })
-        return res.json({ Status: true, Result: result })
-    })
-})
-
-router.get('/manager_count', (req,res) => {
-    const sql = "select count(id) as employee from employees WHERE role = 'manager'" 
-    connect.query(sql,  (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" + err })
-        return res.json({ Status: true, Result: result })
-    })
-})
+// router.get('/manager_count', (req,res) => {
+//     const sql = "select count(id) as employee from employees WHERE role = 'manager'" 
+//     connect.query(sql,  (err, result) => {
+//         if (err) return res.json({ Status: false, Error: "Query Error" + err })
+//         return res.json({ Status: true, Result: result })
+//     })
+// })
 //------------------end manager---------------//
 
 
@@ -126,20 +111,21 @@ router.get('/employee', (req, res) => {
 
 router.get('/employee/:id', (req, res) => {
     const id = req.params.id
-    const sql = "SELECT * FROM employees WHERE id = ? and role = 'employee'"
+    const sql = "SELECT * FROM employees WHERE id = ? "
     connect.query(sql, [id], (err, result) => {
         if (err) return res.json({ Status: false, Error: "Query Error" })
         return res.json({ Status: true, Result: result })
     })
 })
 
+
 router.put('/edit_employee/:id', (req, res) => {
 
     const id = req.params.id;
-    const sql = `UPDATE employees set emp_id=?, name=?, start_date=?, department=?, sick_leave=?, 
-    holidays_leave=?, absence_leave=?, parent_leave=?, role=?, WHERE id = ?`;
+    const sql = `UPDATE employees set username=?, name=?, start_date=?, department=?, sick_leave=?, 
+    holidays_leave=?, absence_leave=?, parent_leave=?, role=? WHERE id = ?`;
     const values = [
-        req.body.emp_id,
+        req.body.username,
         req.body.name,
         req.body.start_date,
         req.body.department,

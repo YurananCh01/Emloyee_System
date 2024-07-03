@@ -36,14 +36,11 @@ router.put("/approve_leave", (req, res) => {
 
         let leaveColumn;
         switch (leave_type) {
-            case 'ลาป่วย':
-                leaveColumn = 'sick_leave';
+            case 'ลาพักร้อน':ก
+                leaveColumn = 'holidays_leave';
                 break;
-            case 'ลาพักร้อน':
-                leaveColumn = 'vacation_leave';
-                break;
-            case 'ลากิจ':
-                leaveColumn = 'personal_leave';
+            case 'ลาเพื่อดูแลบุพการี':
+                leaveColumn = 'parent_leave';
                 break;
             default:
                 leaveColumn = null;
@@ -67,7 +64,7 @@ router.put("/approve_leave", (req, res) => {
 // อัปเดตสถานะการลาเป็นไม่อนุมัติ
 router.put('/reject_leave', (req, res) => {
     const { leave_id } = req.body;
-    const sql = "UPDATE leaves SET  manager_approver = 'ไม่อนุมัติ' WHERE id = ?";
+    const sql = "UPDATE leaves SET manager_approver = 'ไม่อนุมัติ' WHERE id = ?";
     connect.query(sql, [leave_id], (err, result) => {
         if (err) {
             return res.json({ Status: false, Error: "Query error" });

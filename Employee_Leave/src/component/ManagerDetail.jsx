@@ -8,36 +8,54 @@ const ManagerDetail = () => {
     const [leaves, setLeaves] = useState([]);
     const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
+
     useEffect(() => {
-        // ดึงข้อมูลผู้จัดการ
-        axios.get(`http://localhost:3000/manager/manager_detail/${id}`)
-            .then(result => {
-                if (result.data.loginStatus) {
-                    setManager(result.data.data);
+        // Function to fetch manager details
+        const fetchManagerDetails = async () => {
+            try {
+                const response = await axios.get(`http://localhost:3000/manager/manager_detail/${id}`);
+                if (response.data.loginStatus) {
+                    setManager(response.data.data);
                 } else {
-                    console.log(result.data.Error);
+                    console.log(response.data.Error);
                 }
-            }).catch(err => console.log(err));
+            } catch (error) {
+                console.error('Error fetching manager details:', error);
+            }
+        };
 
-        // ดึงข้อมูลการลา
-        axios.get('http://localhost:3000/leave/leaves')
-            .then(result => {
-                if (result.data.Status) {
-                    setLeaves(result.data.Result);
+        // Function to fetch leave requests
+        const fetchLeaveRequests = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/leave/leaves');
+                if (response.data.Status) {
+                    setLeaves(response.data.Result);
                 } else {
-                    alert(result.data.Error);
+                    alert(response.data.Error);
                 }
-            }).catch(err => console.log(err));
+            } catch (error) {
+                console.error('Error fetching leave requests:', error);
+            }
+        };
 
-        // ดึงข้อมูลพนักงาน
-        axios.get('http://localhost:3000/auth/employee')
-            .then(result => {
-                if (result.data.Status) {
-                    setEmployees(result.data.Result);
+        // Function to fetch employees
+        const fetchEmployees = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/auth/employee');
+                if (response.data.Status) {
+                    setEmployees(response.data.Result);
                 } else {
-                    alert(result.data.Error);
+                    alert(response.data.Error);
                 }
-            }).catch(err => console.log(err));
+            } catch (error) {
+                console.error('Error fetching employees:', error);
+            }
+        };
+
+        // Call all fetch functions
+        fetchManagerDetails();
+        fetchLeaveRequests();
+        fetchEmployees();
     }, [id]);
 
     const handleLogout = () => {
@@ -69,9 +87,11 @@ const ManagerDetail = () => {
                             case 'ลาป่วย':
                                 return { ...emp, sick_leave: emp.sick_leave - leave.leave_days };
                             case 'ลาพักร้อน':
-                                return { ...emp, vacation_leave: emp.vacation_leave - leave.leave_days };
+                                return { ...emp, holidays_leave: emp.holidays_leave - leave.leave_days };
                             case 'ลากิจ':
-                                return { ...emp, personal_leave: emp.personal_leave - leave.leave_days };
+                                return { ...emp, absence_leave: emp.absence_leave - leave.leave_days };
+                            case 'ลาเพื่อดูแลบุพการี':
+                                return { ...emp, parent_leave: emp.parent_leave - leave.leave_days };
                             default:
                                 return emp;
                         }
@@ -90,9 +110,9 @@ const ManagerDetail = () => {
             .then(result => {
                 if (result.data.Status) {
                     alert('การลาไม่ได้รับการอนุมัติ');
-                    // อัปเดตสถานะ leave ท้องถิ่น
-                    setLeaves(prevLeaves => prevLeaves.map(leave =>
-                        leave.id === leave_id ? { ...leave, manager_approver: 'ไม่อนุมัติ' } : leave
+                    // Update leave status locally
+                    setLeaves(prevLeaves => prevLeaves.map(lv =>
+                        lv.id === leave_id ? { ...lv, manager_approver: 'ไม่อนุมัติ' } : lv
                     ));
                 } else {
                     alert(result.data.Error);
@@ -100,7 +120,7 @@ const ManagerDetail = () => {
             }).catch(err => console.log(err));
     };
 
-    // รวมข้อมูลการลากับชื่อพนักงานเฉพาะแผนกเดียวกัน
+    // Filter leaves for display
     const filteredLeaves = leaves.filter(leave => {
         const employee = employees.find(emp => emp.id === leave.employee_id);
         return employee && employee.department === manager?.department && leave.manager_approver === 'รออนุมัติ..';
@@ -109,9 +129,10 @@ const ManagerDetail = () => {
         return { ...leave, employeeName: employee ? employee.name : 'Unknown' };
     });
 
+    // Format date function
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString('th-TH', options); 
+        return new Date(dateString).toLocaleDateString('th-TH', options);
     };
 
     return (
@@ -131,12 +152,12 @@ const ManagerDetail = () => {
                             <ul>
                                 {filteredLeaves.map((leave, index) => (
                                     <li key={index}>
-                                        ชื่อ - นามสกุล {leave.employeeName} - วันที่เริ่มลา: {formatDate(leave.start_date)} เวลา {leave.start_time} , 
-                                        ถึง {formatDate(leave.end_date)} เวลา {leave.end_time} ระยะเวลาการลา: {leave.leave_days} วัน,ประเภทการลา: {leave.leave_type}, เหตุผล: {leave.reason}
+                                        ชื่อ - นามสกุล {leave.employeeName} - วันที่เริ่มลา: {formatDate(leave.start_date)} เวลา {leave.start_time}น. ,
+                                        ถึง {formatDate(leave.end_date)} เวลา {leave.end_time}น. ระยะเวลาการลา :{leave.leave_days} วัน, ประเภทการลา: {leave.leave_type}, เหตุผล: {leave.reason}
                                         <div>
                                             <button
                                                 className="btn btn-success btn-sm me-2"
-                                                onClick={() => handleApprove(leave.id)}
+                                                onClick={() => handleApprove(leave)}
                                                 disabled={leave.status === 'อนุมัติ'}
                                             >
                                                 อนุมัติ

@@ -39,26 +39,31 @@ const EmployeeDetail = () => {
       }).catch(err => console.log(err))
   }
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString('th-TH', options);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    let updatedLeaveData = { ...leaveData };
 
-    axios.post('http://localhost:3000/leave/add_leave', leaveData)
+    // ตรวจสอบประเภทการลา
+    if (leaveData.leave_type === 'ลาป่วย' || leaveData.leave_type === 'ลากิจ') {
+      updatedLeaveData.manager_approver = 'อนุมัติ';
+    }
+
+    axios.post('http://localhost:3000/leave/add_leave', updatedLeaveData)
       .then(result => {
-        alert("เพิ่มข้อมูลพนักงานเรียบร้อยแล้ว");
-        window.location.reload()
+        alert("เพิ่มข้อมูลการลาเรียบร้อยแล้ว");
+        window.location.reload();
         console.log('Successfully added leave:', result.data);
       })
       .catch(error => {
         console.error('Error adding leave:', error);
+        alert("เกิดข้อผิดพลาดในการเพิ่มข้อมูลการลา");
       });
   };
-
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateString).toLocaleDateString('th-TH', options); 
-};
-
-
 
   return (
     <div className="container mt-4">
@@ -69,10 +74,10 @@ const EmployeeDetail = () => {
             <p><strong>ชื่อ - นามสกุล:</strong> {employee.name}</p>
             <p><strong>วันที่เริ่มทำงาน:</strong> {formatDate(employee.start_date)}</p>
             <p><strong>แผนก:</strong> {employee.department}</p>
-            <p><strong>จำนวนลาป่วยทั้งหมด:</strong> {employee.sick_leave}</p>
-            <p><strong>จำนวนลาพักร้อนทั้งหมด:</strong> {employee.holidays_leave}</p>
-            <p><strong>จำนวนลากิจทั้งหมด:</strong> {employee.absence_leave}</p>
-            <p><strong>จำนวนลาเพื่อดูแลบุพการี:</strong> {employee.parent_leave}</p>
+            <p><strong>จำนวนลาป่วยทั้งหมด:</strong> {employee.sick_leave} วัน</p>
+            <p><strong>จำนวนลาพักร้อนทั้งหมด:</strong> {employee.holidays_leave} วัน</p>
+            <p><strong>จำนวนลากิจทั้งหมด:</strong> {employee.absence_leave} วัน</p>
+            <p><strong>จำนวนลาเพื่อดูแลบุพการี:</strong> {employee.parent_leave} วัน</p>
           </div>
 
           <h2 className="mb-3">เพิ่มวันลา</h2>
@@ -91,6 +96,8 @@ const EmployeeDetail = () => {
                   <option value="">กรุณาเลือกประเภทการลา</option>
                   <option value="ลาป่วย">ลาป่วย</option>
                   <option value="ลากิจ">ลากิจ</option>
+                  <option value="ลาพักร้อน">ลาพักร้อน</option>
+                  <option value="ลาเพื่อดูแลบุพการี">ลาเพื่อดูแลบุพการี</option>
                 </select>
               </div>
               <div className="col-md-6">
