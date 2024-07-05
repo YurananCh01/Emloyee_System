@@ -23,13 +23,29 @@ router.get("/detail/:id", (req, res) => {
 });
 
 router.get('/employee_detail', (req, res) => {
-    w
-    const sql = "SELECT * FROM leave"
+    
+    const sql = "SELECT * FROM leaves"
     connect.query(sql, (err, result) => {
         if (err) return res.json({ Status: false, Error: "Query Error" })
         return res.json({ Status: true, Result: result })
     })
 })
+
+router.get('/history_employee/:id', (req, res) => {
+    const id = req.params.id;
+    const sql = "SELECT * FROM leaves WHERE employee_id = ?";
+    connect.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Query error:", err);
+            return res.json({ historyStatus: false, Error: "Query error" });
+        }
+        if (result.length > 0) {
+            return res.json({ historyStatus: true, data: result });
+        } else {
+            return res.json({ historyStatus: false, Error: "Employee not found" });
+        }
+    });
+});
 
 router.get('/logout', (req, res) => {
     res.clearCookie('token')

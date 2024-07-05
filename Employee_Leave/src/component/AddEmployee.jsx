@@ -76,13 +76,13 @@ const AddEmployee = () => {
                         >
                             <option value='' disabled>กรุณาเลือกแผนกพนักงาน</option>
                             <option value='seles & Marketing'>seles & Marketing</option>
-                            <option value='Product & Solutions'>Product & Solutions</option>
+                            <option value='Installation'>Installation</option>
+                            <option value='Product'>Product</option>
                             <option value='Service'>Service</option>
-                            <option value='Innovation'>Innovation</option>
-                            <option value='Manufacturing'>Manufacturing</option>
+                            <option value='R&D'>R&D</option>
                             <option value='Operation'>Operation</option>
-                            <option value='Admin'>Admin</option>
                             <option value='HR & Legal'>HR & Legal</option>
+                            <option value='Admin'>Admin</option>
                             
                         </select>
                     </div>

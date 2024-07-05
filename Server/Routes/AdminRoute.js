@@ -157,6 +157,15 @@ router.get('/employee_count', (req,res) => {
         return res.json({ Status: true, Result: result })
     })
 })
+
+router.get('/history', (req,res) => {
+    const sql = "SELECT * FROM leaves"
+    connect.query(sql,  (err, result) => {
+        if (err) return res.json({ Status: false, Error: "Query Error" + err })
+        return res.json({ Status: true, Result: result })
+    })
+
+})
 //------------------End Employee-------------------//
 
 router.get('/logout', (req,res) => {

@@ -22,7 +22,7 @@ const Login = () => {
                     if (role == 'admin'){
                         navigate('/dashboard');
                     }else if (role == 'employee'){
-                        navigate('/employee_detail/'+ result.data.id)
+                        navigate('/dashboardEmployee/employee_detail/'+ result.data.id)
                     }else if (role == 'manager'){
                         navigate('/manager_detail/'+ result.data.id)
                     }
