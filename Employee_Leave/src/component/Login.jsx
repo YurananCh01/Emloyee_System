@@ -24,7 +24,7 @@ const Login = () => {
                     }else if (role == 'employee'){
                         navigate('/dashboardEmployee/employee_detail/'+ result.data.id)
                     }else if (role == 'manager'){
-                        navigate('/manager_detail/'+ result.data.id)
+                        navigate('/dashboardManager/manager_detail/'+ result.data.id)
                     }
                 } else {
                     setError(result.data.Error)

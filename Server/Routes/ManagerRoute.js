@@ -36,7 +36,7 @@ router.put("/approve_leave", (req, res) => {
 
         let leaveColumn;
         switch (leave_type) {
-            case 'ลาพักร้อน':ก
+            case 'ลาพักร้อน':
                 leaveColumn = 'holidays_leave';
                 break;
             case 'ลาเพื่อดูแลบุพการี':

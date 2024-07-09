@@ -79,9 +79,12 @@ const HistoryLeave = () => {
             'ชื่อ - นามสกุล': leave.name,
             'ประเภทการลา': leave.leave_type,
             'วันที่เริ่มต้น': formatDate(leave.start_date),
-            'วันที่เริ่มต้น' : (leave.start_time),
+            'เวลาเริ่มลา' : (leave.start_time),
             'วันที่สิ้นสุด': formatDate(leave.end_date),
+            'เวลาสิ้นสุดการลา' : (leave.end_time),
             'แผนกพนักงาน': leave.department,
+            'จำนวนวันลา': leave.leave_days,
+            'การอนุมัติ': leave.manager_approver
 
         }));
 
@@ -177,6 +180,7 @@ const HistoryLeave = () => {
                             <th>เวลาสิ้นสุดการลา</th>
                             <th>แผนกพนักงาน</th>
                             <th>จำนวนวันลา</th>
+                            <th>การอนุมัติ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -191,6 +195,7 @@ const HistoryLeave = () => {
                                 <td>{leave.end_time}</td>
                                 <td>{leave.department}</td>
                                 <td>{leave.leave_days}</td>
+                                <td>{leave.manager_approver}</td>
                             </tr>
                         ))}
                     </tbody>

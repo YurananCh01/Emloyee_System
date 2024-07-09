@@ -30,15 +30,6 @@ const EmployeeDetail = () => {
       .catch(err => console.log(err))
   }, [id]);
 
-  const handleLogout = () => {
-    axios.get('http://localhost:3000/employee/logout')
-      .then(result => {
-        if (result.data.Status) {
-          navigate('/login')
-        }
-      }).catch(err => console.log(err))
-  }
-
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
     return new Date(dateString).toLocaleDateString('th-TH', options);
@@ -170,7 +161,6 @@ const EmployeeDetail = () => {
       ) : (
         <p>Loading...</p>
       )}
-      <button type="button" className="btn btn-danger mt-3" onClick={handleLogout}>ออกจากระบบ</button>
     </div>
   );
 }

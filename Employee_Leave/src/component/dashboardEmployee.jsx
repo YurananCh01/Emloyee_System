@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
+import { Link, Outlet, useParams,useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './style.css';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import axios from 'axios';
 const DashboardEmployee = () => {
   const [employee, setEmployee] = useState([]);
   const { id } = useParams();
+  const anvigate = useNavigate()
 
   useEffect(() => {
     axios.get('http://localhost:3000/employee/detail/' + id)
@@ -19,7 +20,14 @@ const DashboardEmployee = () => {
       })
       .catch(err => console.log(err))
   }, [id]);
-
+  const handleLogout = () => {
+    axios.get('http://localhost:3000/employee/logout')
+      .then(result => {
+        if (result.data.Status) {
+          anvigate('/login')
+        }
+      }).catch(err => console.log(err))
+  }
   return (
     <div className='container-fluid'>
       <div className='row flex-nowrap'>
@@ -36,9 +44,15 @@ const DashboardEmployee = () => {
                 </Link>
               </li>
               <li className='w-100'>
-                <Link to="/dashboardEmployee/historyEmployee" className='nav-link text-white'>
+                <Link to={`/dashboardEmployee/history_employee/${employee.id}`} className='nav-link text-white'>
                   <i className="fs-4 bi-clock-history ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>ประวัติการลา</span>
+                </Link>
+              </li>
+              <li className='w-100' onClick={handleLogout}>
+                <Link className='nav-link text-white'>
+                  <i className="fs-4 bi-power ms-2"></i>
+                  <span className='ms-2 d-none d-sm-inline'>Logout</span>
                 </Link>
               </li>
             </ul>

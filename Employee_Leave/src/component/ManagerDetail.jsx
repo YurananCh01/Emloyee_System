@@ -7,7 +7,6 @@ const ManagerDetail = () => {
     const { id } = useParams();
     const [leaves, setLeaves] = useState([]);
     const [employees, setEmployees] = useState([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         // Function to fetch manager details
@@ -58,14 +57,6 @@ const ManagerDetail = () => {
         fetchEmployees();
     }, [id]);
 
-    const handleLogout = () => {
-        axios.get('http://localhost:3000/manager/logout')
-            .then(result => {
-                if (result.data.Status) {
-                    navigate('/login');
-                }
-            }).catch(err => console.log(err));
-    };
 
     const handleApprove = (leave) => {
         axios.put('http://localhost:3000/manager/approve_leave', {
@@ -149,37 +140,57 @@ const ManagerDetail = () => {
                         </div>
                         <div>
                             <h5>พนักงานในแผนกเดียวกัน</h5>
-                            <ul>
-                                {filteredLeaves.map((leave, index) => (
-                                    <li key={index}>
-                                        ชื่อ - นามสกุล {leave.employeeName} - วันที่เริ่มลา: {formatDate(leave.start_date)} เวลา {leave.start_time}น. ,
-                                        ถึง {formatDate(leave.end_date)} เวลา {leave.end_time}น. ระยะเวลาการลา :{leave.leave_days} วัน, ประเภทการลา: {leave.leave_type}, เหตุผล: {leave.reason}
-                                        <div>
-                                            <button
-                                                className="btn btn-success btn-sm me-2"
-                                                onClick={() => handleApprove(leave)}
-                                                disabled={leave.status === 'อนุมัติ'}
-                                            >
-                                                อนุมัติ
-                                            </button>
-                                            <button
-                                                className="btn btn-danger btn-sm"
-                                                onClick={() => handleReject(leave.id)}
-                                                disabled={leave.status === 'ไม่อนุมัติ'}
-                                            >
-                                                ไม่อนุมัติ
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>ชื่อ - นามสกุล</th>
+                                        <th>วันที่เริ่มลา</th>
+                                        <th>เวลาเริ่มลา</th>
+                                        <th>วันที่สิ้นสุด</th>
+                                        <th>เวลาสิ้นสุด</th>
+                                        <th>ระยะเวลาการลา (วัน)</th>
+                                        <th>ประเภทการลา</th>
+                                        <th>เหตุผล</th>
+                                        <th>การดำเนินการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredLeaves.map((leave, index) => (
+                                        <tr key={index}>
+                                            <td>{leave.employeeName}</td>
+                                            <td>{formatDate(leave.start_date)}</td>
+                                            <td>{leave.start_time}</td>
+                                            <td>{formatDate(leave.end_date)}</td>
+                                            <td>{leave.end_time}</td>
+                                            <td>{leave.leave_days}</td>
+                                            <td>{leave.leave_type}</td>
+                                            <td>{leave.reason}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-success btn-sm me-2"
+                                                    onClick={() => handleApprove(leave)}
+                                                    disabled={leave.status === 'อนุมัติ'}
+                                                >
+                                                    อนุมัติ
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => handleReject(leave.id)}
+                                                    disabled={leave.status === 'ไม่อนุมัติ'}
+                                                >
+                                                    ไม่อนุมัติ
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 ) : (
                     <p>Loading...</p>
                 )}
             </div>
-            <button type="button" className="btn btn-danger mt-3" onClick={handleLogout}>ออกจากระบบ</button>
         </div>
     );
 };
