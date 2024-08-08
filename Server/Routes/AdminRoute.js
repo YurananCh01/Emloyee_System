@@ -150,13 +150,22 @@ router.delete('/delete_employee/:id', (req, res) => {
     })
 })
 
-router.get('/employee_count', (req,res) => {
-    const sql = "select count(id) as employee from employees and role = 'employee'" 
-    connect.query(sql,  (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" + err })
-        return res.json({ Status: true, Result: result })
-    })
-})
+router.get('/employee_count', (req, res) => {
+    const sql = "SELECT COUNT(id) as employee_count FROM employees WHERE role = 'employee'";
+    connect.query(sql, (err, result) => {
+        if (err) return res.json({ Status: false, Error: "Query Error: " + err });
+        return res.json({ Status: true, Result: result });
+    });
+});
+
+router.get('/manager_count', (req, res) => {
+    const sql = "SELECT COUNT(id) as manager_count FROM employees WHERE role = 'manager'";
+    connect.query(sql, (err, result) => {
+        if (err) return res.json({ Status: false, Error: "Query Error: " + err });
+        return res.json({ Status: true, Result: result });
+    });
+});
+
 
 router.get('/history', (req,res) => {
     const sql = "SELECT * FROM leaves"

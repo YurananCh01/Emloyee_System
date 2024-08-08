@@ -110,7 +110,7 @@ const EmployeeDetail = () => {
                   className="form-control"
                   value={leaveData.start_time}
                   onChange={e => setLeaveData({ ...leaveData, start_time: e.target.value })}
-                />
+                  required/>
               </div>
               <div className="col-md-6">
                 <label htmlFor="inputEndDate" className="form-label">วันที่สิ้นสุดการลา</label>
@@ -120,7 +120,7 @@ const EmployeeDetail = () => {
                   className="form-control"
                   value={leaveData.end_date}
                   onChange={e => setLeaveData({ ...leaveData, end_date: e.target.value })}
-                />
+                  required/>
               </div>
               <div className="col-md-6">
                 <label htmlFor="inputEndTime" className="form-label">เวลาสิ้นสุดการลา</label>
@@ -130,7 +130,7 @@ const EmployeeDetail = () => {
                   className="form-control"
                   value={leaveData.end_time}
                   onChange={e => setLeaveData({ ...leaveData, end_time: e.target.value })}
-                />
+                  required/>
               </div>
               <div className="col-md-6">
                 <label htmlFor="inputLeaveDays" className="form-label">จำนวนวันลา *หมายเหตุถ้าลาครึ่งวันให้ใส่ 0.5</label>
@@ -140,7 +140,7 @@ const EmployeeDetail = () => {
                   className="form-control"
                   value={leaveData.leave_days}
                   onChange={e => setLeaveData({ ...leaveData, leave_days: e.target.value })}
-                />
+                  required/>
               </div>
               <div className="col-12">
                 <label htmlFor="inputReason" className="form-label">เหตุผลการลา</label>
@@ -150,7 +150,7 @@ const EmployeeDetail = () => {
                   className="form-control"
                   value={leaveData.reason}
                   onChange={e => setLeaveData({ ...leaveData, reason: e.target.value })}
-                />
+                  required/>
               </div>
               <div className="col-12">
                 <button type="submit" className="btn btn-primary w-100">ยืนยัน</button>

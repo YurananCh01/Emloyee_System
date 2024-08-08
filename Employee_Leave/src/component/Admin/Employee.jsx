@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 const Employee = () => {
 
     const [employee, setEmployee] = useState([]);
+    const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บค่าช่องค้นหา
+
     useEffect(() => {
         axios.get('http://localhost:3000/auth/employee')
             .then(result => {
@@ -14,25 +16,31 @@ const Employee = () => {
                     alert(result.data.Error);
                 }
             }).catch(err => console.log(err));
-
-            
     }, []);
 
+    const handleDelete = (id) => {
+        axios.delete('http://localhost:3000/auth/delete_employee/' + id)
+            .then(result => {
+                if (result.data.Status) {
+                    window.location.reload();
+                } else {
+                    alert(result.data.Error);
+                }
+            });
+    };
 
-
-const handleDelete = (id) => {
-    axios.delete('http://localhost:3000/auth/delete_employee/'+id)
-    .then(result => {
-        if(result.data.Status){
-            window.location.reload()
-        }else {
-            alert(result.data.Error);
-        }
-    })
-}
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        return new Date(dateString).toLocaleDateString('th-TH', options); 
+        return new Date(dateString).toLocaleDateString('th-TH', options);
+    };
+
+    // ฟังก์ชันกรองข้อมูลตามค่าที่ค้นหา
+    const filteredEmployees = employee.filter((e) =>
+        e.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const clearSearch = () => {
+        setSearchTerm('');
     };
     return (
         <div className='px-5 mt-3'>
@@ -40,6 +48,17 @@ const handleDelete = (id) => {
                 <h3>รายชื่อพนักงาน</h3>
             </div>
             <Link to='/dashboard/add_employee' className='btn btn-success'>Add Employee</Link>
+            <div className='d-flex align-items-center'>
+                <input
+                    type="text"
+                    placeholder="ค้นหาชื่อพนักงาน"
+                    className="form-control me-2 searchEMP-input"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className='btn btn-secondary' onClick={clearSearch}>ล้างการค้นหา</button>
+            </div>
+
             <div className='mt-3'>
                 <table className='table'>
                     <thead>
@@ -53,10 +72,11 @@ const handleDelete = (id) => {
                             <th>จำนวนลากิจทั้งหมด</th>
                             <th>จำนวนลาเพื่อดูแลบุพการี (พ่อ แม่ และลูก)</th>
                             <th>บทบาทพนักงาน</th>
+                            <th>การกระทำ</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {employee.map((e, index) => (
+                        {filteredEmployees.map((e, index) => (
                             <tr key={index}>
                                 <td>{e.username}</td>
                                 <td>{e.name}</td>

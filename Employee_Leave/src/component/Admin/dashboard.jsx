@@ -1,21 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import './style.css';
 import axios from 'axios';
+import { useAuth } from '../../AuthContext';
 
 const Dashboard = () => {
-  const anvigate = useNavigate()
-  axios.defaults.withCredentials = true
+  const navigate = useNavigate();
+  const { role, logout } = useAuth();
+
+  axios.defaults.withCredentials = true;
+
   const handleLogout = () => {
     axios.get('http://localhost:3000/auth/logout')
       .then(result => {
         if (result.data.Status) {
-          anvigate('/login')
+          logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext
+          localStorage.removeItem('user'); // ลบข้อมูลผู้ใช้จาก localStorage
+          navigate('/login'); // นำทางไปยังหน้าเข้าสู่ระบบ
         }
       })
-  }
+      .catch(err => console.log(err));
+  };
 
+  useEffect(() => {
+    // ตรวจสอบว่าผู้ใช้ล็อกเอาต์หรือไม่
+    if (!role) {
+      navigate('/login', { replace: true }); // เปลี่ยนไปยังหน้าเข้าสู่ระบบ
+    }
+  }, [role, navigate]);
 
   return (
     <div className='container-fluid'>
@@ -43,7 +55,7 @@ const Dashboard = () => {
               </li>
               <li className='w-100'>
                 <Link to="/dashboard/history" className='nav-link text-white'>
-                  <i className="fs-4 bi-people ms-2"></i>
+                  <i className="fs-4 bi-clock-history ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>ประวัติการลาของพนักงาน</span>
                 </Link>
               </li>
@@ -58,7 +70,7 @@ const Dashboard = () => {
         </div>
         <div className='col p-3 m-0'>
           <div className='p-2 d-flex justify-content-center shadow'>
-            <h2>...................</h2>
+            <h2>Dashboard</h2>
           </div>
           <div className='mt-3'>
             <Outlet />

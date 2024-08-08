@@ -1,33 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Link, Outlet, useParams,useNavigate } from 'react-router-dom';
+import { Link, Outlet, useParams, useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import './style.css';
+import '../style.css';
 import axios from 'axios';
+import { useAuth } from '../../AuthContext';
 
 const DashboardEmployee = () => {
-  const [employee, setEmployee] = useState([]);
+  const [employee, setEmployee] = useState(null);
   const { id } = useParams();
-  const anvigate = useNavigate()
+  const navigate = useNavigate();
+  const { role, logout } = useAuth(); // รับบทบาทและฟังก์ชัน logout จาก AuthContext
 
   useEffect(() => {
-    axios.get('http://localhost:3000/employee/detail/' + id)
+    // ตรวจสอบบทบาทผู้ใช้
+    if (role !== 'employee') {
+      navigate('/login'); // หากไม่ได้ล็อกอินเป็นพนักงานให้นำทางไปยังหน้าเข้าสู่ระบบ
+    }
+
+    // ดึงข้อมูลพนักงาน
+    axios.get(`http://localhost:3000/employee/detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setEmployee(result.data.data);
         } else {
           console.log(result.data.Error);
+          navigate('/login'); // หากไม่สามารถดึงข้อมูลได้ ให้นำทางไปยังหน้าเข้าสู่ระบบ
         }
       })
-      .catch(err => console.log(err))
-  }, [id]);
+      .catch(err => {
+        console.error(err);
+        navigate('/login'); // หากเกิดข้อผิดพลาด ให้นำทางไปยังหน้าเข้าสู่ระบบ
+      });
+  }, [id, role, navigate]);
+
   const handleLogout = () => {
     axios.get('http://localhost:3000/employee/logout')
       .then(result => {
         if (result.data.Status) {
-          anvigate('/login')
+          logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext
+          navigate('/login'); // เมื่อ Logout เสร็จสามารถใช้ navigate เพื่อเปลี่ยนหน้าได้
         }
-      }).catch(err => console.log(err))
-  }
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <div className='container-fluid'>
       <div className='row flex-nowrap'>
@@ -38,13 +54,13 @@ const DashboardEmployee = () => {
             {/* เมนูการนำทาง */}
             <ul className='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start' id='menu'>
               <li className='w-100'>
-                <Link to={`/dashboardEmployee/employee_detail/${employee.id}`} className='nav-link text-white'>
+                <Link to={`/dashboardEmployee/employee_detail/${employee ? employee.id : ''}`} className='nav-link text-white'>
                   <i className="fs-4 bi-person-vcard ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>แบบฟอร์มขอลา</span>
                 </Link>
               </li>
               <li className='w-100'>
-                <Link to={`/dashboardEmployee/history_employee/${employee.id}`} className='nav-link text-white'>
+                <Link to={`/dashboardEmployee/history_employee/${employee ? employee.id : ''}`} className='nav-link text-white'>
                   <i className="fs-4 bi-clock-history ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>ประวัติการลา</span>
                 </Link>
@@ -69,6 +85,6 @@ const DashboardEmployee = () => {
       </div>
     </div>
   );
-}
+};
 
 export default DashboardEmployee;

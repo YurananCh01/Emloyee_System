@@ -1,52 +1,60 @@
-import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Login from './component/Login.jsx'
-import Dashboard from './component/dashboard.jsx'
-import Home from './component/Home.jsx'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Employee from './component/Employee.jsx'
-import AddEmployee from './component/AddEmployee.jsx'
-import EditEmployee from './component/EditEmployee.jsx'
-import EmployeeDetail from './component/EmployeeDetail.jsx'
-import ManagerDetail from './component/ManagerDetail.jsx'
-import HistoryLeave from './component/HistoryLeave.jsx'
-import DashboardEmployee from './component/dashboardEmployee.jsx'
-import DashboardManager from './component/dashboardManager.jsx'
-import HistoryEmployee from './component/HistoryEmployee.jsx'
-import HistoryEmployeeDepartment from './component/HistoryEmployeeDepartment.jsx'
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Login from './component/Login/Login.jsx';
+import Dashboard from './component/Admin/dashboard.jsx';
+import Home from './component/Admin/Home.jsx';
+import Employee from './component/Admin/Employee.jsx';
+import AddEmployee from './component/Admin/AddEmployee.jsx';
+import EditEmployee from './component/Admin/EditEmployee.jsx';
+import EmployeeDetail from './component/Employee/EmployeeDetail.jsx';
+import ManagerDetail from './component/Manager/ManagerDetail.jsx';
+import HistoryLeave from './component/Admin/HistoryLeave.jsx';
+import DashboardEmployee from './component/Employee/dashboardEmployee.jsx';
+import DashboardManager from './component/Manager/dashboardManager.jsx';
+import HistoryEmployee from './component/Employee/HistoryEmployee.jsx';
+import HistoryEmployeeDepartment from './component/Manager/HistoryEmployeeDepartment.jsx';
+import { AuthProvider, useAuth } from './AuthContext';
 
-
+const PrivateRoute = ({ children, role }) => {
+  const { role: userRole } = useAuth();
+  if (userRole !== role) {
+    return <Navigate to="/login" />;
+  }
+  return children;
+};
 
 function App() {
-
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/login' element={<Login />}></Route>
-        {/* employee */}
-        <Route path='/dashboardEmployee' element={<DashboardEmployee />}>
-          <Route path='/dashboardEmployee/employee_detail/:id' element={<EmployeeDetail />}></Route>
-          <Route path='/dashboardEmployee/history_employee/:id' element={<HistoryEmployee />}></Route>
-        </Route>
-
-        {/* manager */}
-        <Route path='/dashboardManager' element={<DashboardManager />}>
-          <Route path='/dashboardManager/manager_detail/:id' element={<ManagerDetail />}></Route>
-          <Route path='/dashboardManager/history_employee_department/:id' element={<HistoryEmployeeDepartment />}></Route>
-        </Route>
-
-        {/* admin */}
-        <Route path='/dashboard' element={<Dashboard />}>
-          <Route path='' element={<Home />}></Route>
-          <Route path='/dashboard/history' element={<HistoryLeave />}></Route>
-          <Route path='/dashboard/employee' element={<Employee />}></Route>
-          <Route path='/dashboard/add_employee' element={<AddEmployee />}></Route>
-          <Route path='/dashboard/edit_employee/:id' element={<EditEmployee />}></Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-
-  )
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          {/* employee */}
+          <Route path="/dashboardEmployee" element={<PrivateRoute role="employee"><DashboardEmployee /></PrivateRoute>}>
+            <Route path="/dashboardEmployee/employee_detail/:id" element={<EmployeeDetail />} />
+            <Route path="/dashboardEmployee/history_employee/:id" element={<HistoryEmployee />} />
+          </Route>
+          
+          {/* manager */}
+          <Route path="/dashboardManager" element={<PrivateRoute role="manager"><DashboardManager /></PrivateRoute>}>
+            <Route path="/dashboardManager/manager_detail/:id" element={<ManagerDetail />} />
+            <Route path="/dashboardManager/history_employee_department/:id" element={<HistoryEmployeeDepartment />} />
+          </Route>
+          
+          {/* admin */}
+          <Route path="/dashboard" element={<PrivateRoute role="admin"><Dashboard /></PrivateRoute>}>
+            <Route path="" element={<Home />} />
+            <Route path="/dashboard/history" element={<HistoryLeave />} />
+            <Route path="/dashboard/employee" element={<Employee />} />
+            <Route path="/dashboard/add_employee" element={<AddEmployee />} />
+            <Route path="/dashboard/edit_employee/:id" element={<EditEmployee />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;

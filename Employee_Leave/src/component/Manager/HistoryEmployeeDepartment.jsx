@@ -1,17 +1,30 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 
 const HistoryLeave = () => {
+    const { id } = useParams(); // ดึง ID ของผู้ใช้ปัจจุบันจาก URL
     const [leaves, setLeaves] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [combinedData, setCombinedData] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [department, setDepartment] = useState('');
+    const [managerDepartment, setManagerDepartment] = useState('');
 
     useEffect(() => {
+        // ดึงข้อมูลผู้จัดการปัจจุบัน
+        axios.get(`http://localhost:3000/manager/manager_detail/${id}`)
+            .then(result => {
+                if (result.data.loginStatus) {
+                    const currentUser = result.data.data;
+                    setManagerDepartment(currentUser.department);
+                } else {
+                    alert(result.data.Error);
+                }
+            }).catch(err => console.log(err));
+
+        // ดึงข้อมูลการลา
         axios.get('http://localhost:3000/auth/history')
             .then(result => {
                 if (result.data.Status) {
@@ -21,6 +34,7 @@ const HistoryLeave = () => {
                 }
             }).catch(err => console.log(err));
 
+        // ดึงข้อมูลพนักงาน
         axios.get('http://localhost:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
@@ -29,11 +43,10 @@ const HistoryLeave = () => {
                     alert(result.data.Error);
                 }
             }).catch(err => console.log(err));
+    }, [id]);
 
-
-    }, []);
     useEffect(() => {
-        // Combine leaves and employees data based on username
+        // รวมข้อมูลการลาและพนักงานโดยอิงจาก employee_id
         if (leaves.length > 0 && employees.length > 0) {
             const combined = leaves.map(leave => {
                 const employee = employees.find(emp => emp.id === leave.employee_id);
@@ -47,70 +60,30 @@ const HistoryLeave = () => {
             setCombinedData(combined);
         }
     }, [leaves, employees]);
+
     const setToMidnight = (date) => {
         const d = new Date(date);
         d.setHours(0, 0, 0, 0);
         return d.toISOString();
     };
+
     const filteredData = combinedData.filter(leave => {
         const leaveStartDate = setToMidnight(new Date(leave.start_date));
         const leaveEndDate = setToMidnight(new Date(leave.end_date));
         const start = startDate ? setToMidnight(new Date(startDate)) : null;
         const end = endDate ? setToMidnight(new Date(endDate)) : null;
 
+        const matchesDateRange = (!start || leaveStartDate >= start) && (!end || leaveEndDate <= end);
+        const matchesDepartment = leave.department === managerDepartment; // ตรวจสอบว่าแผนกตรงกับแผนกของผู้จัดการ
 
-        const matchesDateRange = (!start || leaveStartDate >= start) && (!end || leaveEndDate <= end)
-        const matchesDepartment = !department || leave.department === department;
-        console.log(start)
         return matchesDateRange && matchesDepartment;
-
     });
 
     const clearFilters = () => {
         setStartDate('');
         setEndDate('');
-        setDepartment('');
     };
 
-    //========================== export excel ===========================================
-    const exportToExcel = () => {
-        const formattedData = filteredData.map(leave => ({
-            'รหัสพนักงาน': leave.username,
-            'ชื่อ - นามสกุล': leave.name,
-            'ประเภทการลา': leave.leave_type,
-            'วันที่เริ่มต้น': formatDate(leave.start_date),
-            'เวลาเริ่มลา' : (leave.start_time),
-            'วันที่สิ้นสุด': formatDate(leave.end_date),
-            'เวลาสิ้นสุดการลา' : (leave.end_time),
-            'แผนกพนักงาน': leave.department,
-            'จำนวนวันลา': leave.leave_days,
-            'การอนุมัติ': leave.manager_approver
-
-        }));
-
-        const worksheet = XLSX.utils.json_to_sheet(formattedData);
-
-        // Adding custom styles to the header row
-        const headerStyle = {
-            font: { bold: true },
-            alignment: { horizontal: "center", vertical: "center" },
-            border: {
-                top: { style: "thin" },
-                bottom: { style: "thin" },
-                left: { style: "thin" },
-                right: { style: "thin" }
-            }
-        };
-        ["A1", "B1", "C1", "D1", "E1", "F1", "G1"].forEach((cell) => {
-            worksheet[cell].s = headerStyle;
-        });
-
-
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'HistoryLeave');
-        XLSX.writeFile(workbook, 'history_leave.xlsx');
-    };
-    //========================== end export =============================================
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return new Date(dateString).toLocaleDateString('th-TH', options);
@@ -143,35 +116,13 @@ const HistoryLeave = () => {
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <div className='col-4'>
-                        <label htmlFor='department'>แผนกพนักงาน:</label>
-                        <select
-                            id='department'
-                            className='form-select'
-                            value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
-                        >
-                            <option value=''>แผนกทั้งหมด</option>
-                            <option value='seles & Marketing'>seles & Marketing</option>
-                            <option value='Installation'>Installation</option>
-                            <option value='Product'>Product</option>
-                            <option value='Service'>Service</option>
-                            <option value='R&D'>R&D</option>
-                            <option value='Operation'>Operation</option>
-                            <option value='HR & Legal'>HR & Legal</option>
-                        </select>
-                    </div>
                     <div className='col-2'>
-                        <button className='btn btn-warning mt-4' onClick={clearFilters}>ล้างการค้นหาวันที่</button>
-                    </div>
-                    <div className='col-3 mt-4'>
-                        <button className='btn btn-success' onClick={exportToExcel}>ส่งออกเป็น Excel</button>
+                        <button className='btn btn-warning mt-4' onClick={clearFilters}>ล้างการค้นหา</button>
                     </div>
                 </div>
                 <table className='table mt-3'>
                     <thead>
                         <tr>
-                            <th>รหัสพนักงาน</th>
                             <th>ชื่อ - นามสกุล</th>
                             <th>ประเภทการลา</th>
                             <th>วันที่เริ่มต้น</th>
@@ -186,7 +137,6 @@ const HistoryLeave = () => {
                     <tbody>
                         {filteredData.map((leave, index) => (
                             <tr key={index}>
-                                <td>{leave.username}</td>
                                 <td>{leave.name}</td>
                                 <td>{leave.leave_type}</td>
                                 <td>{formatDate(leave.start_date)}</td>
@@ -203,6 +153,6 @@ const HistoryLeave = () => {
             </div>
         </div>
     );
-}
+};
 
-export default HistoryLeave
+export default HistoryLeave;

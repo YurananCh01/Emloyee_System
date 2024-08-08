@@ -1,34 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useParams, useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import './style.css';
+import '../style.css';
 import axios from 'axios';
+import { useAuth } from '../../AuthContext'; // เพิ่มการนำเข้า AuthContext
 
 const dashboardManager = () => {
-  const [manager, setManager] = useState([]);
+  const [manager, setManager] = useState(null);
   const { id } = useParams();
-  const anvigate = useNavigate()
+  const navigate = useNavigate();
+  const { role,logout } = useAuth(); // รับบทบาทจาก AuthContext
+
   useEffect(() => {
-    axios.get('http://localhost:3000/manager/manager_detail/'+id)
+    // ตรวจสอบบทบาทผู้ใช้
+    if (role !== 'manager') {
+      navigate('/login'); // หากไม่ได้ล็อกอินเป็นผู้จัดการให้นำทางไปยังหน้าเข้าสู่ระบบ
+    }
+
+    // ดึงข้อมูลผู้จัดการ
+    axios.get(`http://localhost:3000/manager/manager_detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setManager(result.data.data);
         } else {
           console.log(result.data.Error);
+          navigate('/login'); // หากไม่สามารถดึงข้อมูลได้ ให้นำทางไปยังหน้าเข้าสู่ระบบ
         }
       })
-      .catch(err => console.log(err))
-  }, [id]);
+      .catch(err => {
+        console.error(err);
+        navigate('/login'); // หากเกิดข้อผิดพลาด ให้นำทางไปยังหน้าเข้าสู่ระบบ
+      });
+  }, [id, role, navigate]);
 
   const handleLogout = () => {
     axios.get('http://localhost:3000/manager/logout')
       .then(result => {
         if (result.data.Status) {
-          anvigate('/login'); // เมื่อ Logout เสร็จสามารถใช้ navigate เพื่อเปลี่ยนหน้าได้
+          logout();
+          navigate('/login'); // เมื่อ Logout เสร็จสามารถใช้ navigate เพื่อเปลี่ยนหน้าได้
         }
       })
       .catch(err => console.log(err));
   };
+
   return (
     <div className='container-fluid'>
       <div className='row flex-nowrap'>
@@ -39,13 +54,13 @@ const dashboardManager = () => {
             {/* เมนูการนำทาง */}
             <ul className='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start' id='menu'>
               <li className='w-100'>
-                <Link to={`/dashboardManager/manager_detail/${manager.id}`} className='nav-link text-white'>
+                <Link to={`/dashboardManager/manager_detail/${manager ? manager.id : ''}`} className='nav-link text-white'>
                   <i className="fs-4 bi-person-vcard ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>หน้าหลัก</span>
                 </Link>
               </li>
               <li className='w-100'>
-                <Link to={`/dashboardManager/history_employee_department/${manager.id}`} className='nav-link text-white'>
+                <Link to={`/dashboardManager/history_employee_department/${manager ? manager.id : ''}`} className='nav-link text-white'>
                   <i className="fs-4 bi-clock-history ms-2"></i>
                   <span className='ms-2 d-none d-sm-inline'>ประวัติการลาของพนักงาน</span>
                 </Link>
@@ -69,7 +84,7 @@ const dashboardManager = () => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default dashboardManager
