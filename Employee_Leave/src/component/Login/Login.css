@@ -9,7 +9,7 @@
   color: #efefef; /* เปลี่ยนสีของข้อความที่นี่ */
 }
 .form {
-  background-color: rgba(20, 33, 36, 0.9);;
+  background-color: rgba(20, 33, 36, 0.8);;
   --bg-light: #ffffff;
   --bg-dark: #707070;
   --clr: #f9fcfa;
