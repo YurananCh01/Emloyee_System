@@ -83,6 +83,7 @@ const AddEmployee = () => {
                             <option value='Service'>Service</option>
                             <option value='R&D'>R&D</option>
                             <option value='Production'>Production</option>         
+                            <option value='ACCOUNTANT'>ACCOUNTANT</option>    
                         </select>
                     </div>
                     <div className='col-12'>

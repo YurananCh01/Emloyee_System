@@ -4,6 +4,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import '../style.css';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext'; // เพิ่มการนำเข้า AuthContext
+import logo from '../../assets/step-solutions-logo.jpg';
+import { Helmet } from 'react-helmet'; 
+
 
 const dashboardManager = () => {
   const [manager, setManager] = useState(null);
@@ -46,10 +49,15 @@ const dashboardManager = () => {
 
   return (
     <div className='container-fluid'>
+      <Helmet>
+        <title>บริษัท สเตป โซลูชั่นส์ จำกัด</title>
+        <link rel="icon" href={logo} type="image/jpeg" />
+      </Helmet>
       <div className='row flex-nowrap'>
         {/* คอลัมน์สำหรับแถบด้านข้าง */}
         <div className='col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark'>
           <div className='d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100'>
+          <img src={logo} alt="Logo" className='mb-3' style={{ width: '80%', height: 'auto' }} />
             <h5>บริษัท สเตป โซลูชั่นส์ จำกัด</h5>
             {/* เมนูการนำทาง */}
             <ul className='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start' id='menu'>
@@ -68,7 +76,7 @@ const dashboardManager = () => {
               <li className='w-100' onClick={handleLogout}>
                 <Link className='nav-link text-white'>
                   <i className="fs-4 bi-power ms-2"></i>
-                  <span className='ms-2 d-none d-sm-inline'>Logout</span>
+                  <span className='ms-2 d-none d-sm-inline'>ออกจากระบบ</span>
                 </Link>
               </li>
             </ul>

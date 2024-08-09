@@ -100,7 +100,8 @@ const EditEmployee = () => {
                             <option value='Operation'>Operation</option>
                             <option value='Service'>Service</option>
                             <option value='R&D'>R&D</option>
-                            <option value='Production'>Production</option>         
+                            <option value='Production'>Production</option>   
+                            <option value='ACCOUNTANT'>ACCOUNTANT</option>          
                             
                         </select>
                     </div>

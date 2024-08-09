@@ -15,7 +15,6 @@ router.get("/manager_detail/:id", (req, res) => {
             return res.json({ loginStatus: false, Error: "Query error" });
         }
         if (result.length > 0) {
-            console.log(result);
             return res.json({ loginStatus: true, data: result[0] });
         } else {
             return res.json({ loginStatus: false, Error: "Manager not found" });

@@ -3,10 +3,12 @@ import './Login.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+import logo from '../../assets/step-solutions-logo.jpg';
+import { Helmet } from 'react-helmet'; 
 
 const Login = () => {
   const [values, setValues] = useState({
-    username: '', // Updated key from username to email
+    username: '', 
     password: ''
   });
   const [error, setError] = useState(null);
@@ -49,6 +51,10 @@ const Login = () => {
 
   return (
     <div className='bodyloginPage'>
+       <Helmet>
+        <title>บริษัท สเตป โซลูชั่นส์ จำกัด</title>
+        <link rel="icon" href={logo} type="image/jpeg" />
+      </Helmet>
       <div className='d-flex justify-content-center align-items-center vh-100 loginPage'>
         <form className='form' onSubmit={handleSubmit}>
           {error && <div className='text-danger'>{error}</div>}
