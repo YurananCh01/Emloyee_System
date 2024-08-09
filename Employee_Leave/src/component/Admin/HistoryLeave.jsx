@@ -12,7 +12,7 @@ const HistoryLeave = () => {
     const [department, setDepartment] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:3000/auth/history')
+        axios.get('http://172.16.252.120:3000/auth/history')
             .then(result => {
                 if (result.data.Status) {
                     setLeaves(result.data.Result);
@@ -21,7 +21,7 @@ const HistoryLeave = () => {
                 }
             }).catch(err => console.log(err));
 
-        axios.get('http://localhost:3000/auth/employee')
+        axios.get('http://172.16.252.120:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
                     setEmployees(result.data.Result);

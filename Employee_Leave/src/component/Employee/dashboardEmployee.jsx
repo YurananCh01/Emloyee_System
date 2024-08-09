@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import '../style.css';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
-import logo from '../../assets/step-solutions-logo.jpg';
+import logo from '../../assets/logo-step2.png';
 
 const DashboardEmployee = () => {
   const [employee, setEmployee] = useState(null);
@@ -19,7 +19,7 @@ const DashboardEmployee = () => {
     }
 
     // ดึงข้อมูลพนักงาน
-    axios.get(`http://localhost:3000/employee/detail/${id}`)
+    axios.get(`http://172.16.252.120:3000/employee/detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setEmployee(result.data.data);
@@ -35,7 +35,7 @@ const DashboardEmployee = () => {
   }, [id, role, navigate]);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3000/employee/logout')
+    axios.get('http://172.16.252.120:3000/employee/logout')
       .then(result => {
         if (result.data.Status) {
           logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext

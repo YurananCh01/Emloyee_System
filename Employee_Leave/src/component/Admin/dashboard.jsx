@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
-import logo from '../../assets/step-solutions-logo.jpg';
+import logo from '../../assets/logo-step2.png';
 import { Helmet } from 'react-helmet'; 
 
 const Dashboard = () => {
@@ -13,7 +13,7 @@ const Dashboard = () => {
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
-    axios.get('http://localhost:3000/auth/logout')
+    axios.get('http://172.16.252.120:3000/auth/logout')
       .then(result => {
         if (result.data.Status) {
           logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext

@@ -22,7 +22,7 @@ const EditEmployee = () => {
 
 
     useEffect(() => {
-        axios.get('http://localhost:3000/auth/employee/'+ id)
+        axios.get('http://172.16.252.120:3000/auth/employee/'+ id)
             .then(result => {
                 console.log(result.data.Result);
                 setEmployee({
@@ -45,7 +45,7 @@ const EditEmployee = () => {
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.put('http://localhost:3000/auth/edit_employee/' + id, employee, {
+        axios.put('http://172.16.252.120:3000/auth/edit_employee/' + id, employee, {
             start_date: employee.start_date.substring(0, 10)
         }).then(result => {
                 if (result.data.Status) {

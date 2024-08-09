@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import '../style.css';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext'; // เพิ่มการนำเข้า AuthContext
-import logo from '../../assets/step-solutions-logo.jpg';
+import logo from '../../assets/logo-step2.png';
 import { Helmet } from 'react-helmet'; 
 
 
@@ -21,7 +21,7 @@ const dashboardManager = () => {
     }
 
     // ดึงข้อมูลผู้จัดการ
-    axios.get(`http://localhost:3000/manager/manager_detail/${id}`)
+    axios.get(`http://172.16.252.120:3000/manager/manager_detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setManager(result.data.data);
@@ -37,7 +37,7 @@ const dashboardManager = () => {
   }, [id, role, navigate]);
 
   const handleLogout = () => {
-    axios.get('http://localhost:3000/manager/logout')
+    axios.get('http://172.16.252.120:3000/manager/logout')
       .then(result => {
         if (result.data.Status) {
           logout();
@@ -62,9 +62,15 @@ const dashboardManager = () => {
             {/* เมนูการนำทาง */}
             <ul className='nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start' id='menu'>
               <li className='w-100'>
+                <Link to={`/dashboardManager/manager_leave/${manager ? manager.id : ''}`} className='nav-link text-white'>
+                  <i className="fs-4 bi bi-person-circle ms-2"></i>
+                  <span className='ms-2 d-none d-sm-inline'>หน้าหลัก</span>
+                </Link>
+              </li>
+              <li className='w-100'>
                 <Link to={`/dashboardManager/manager_detail/${manager ? manager.id : ''}`} className='nav-link text-white'>
                   <i className="fs-4 bi-person-vcard ms-2"></i>
-                  <span className='ms-2 d-none d-sm-inline'>หน้าหลัก</span>
+                  <span className='ms-2 d-none d-sm-inline'>รายละเอียดการขอลางาน</span>
                 </Link>
               </li>
               <li className='w-100'>

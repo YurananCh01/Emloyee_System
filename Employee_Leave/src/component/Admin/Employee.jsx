@@ -8,7 +8,7 @@ const Employee = () => {
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บค่าช่องค้นหา
 
     useEffect(() => {
-        axios.get('http://localhost:3000/auth/employee')
+        axios.get('http://172.16.252.120:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
                     setEmployee(result.data.Result);
@@ -19,7 +19,7 @@ const Employee = () => {
     }, []);
 
     const handleDelete = (id) => {
-        axios.delete('http://localhost:3000/auth/delete_employee/' + id)
+        axios.delete('http://172.16.252.120:3000/auth/delete_employee/' + id)
             .then(result => {
                 if (result.data.Status) {
                     window.location.reload();

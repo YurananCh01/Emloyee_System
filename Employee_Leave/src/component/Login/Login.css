@@ -1,19 +1,19 @@
 /* From Uiverse.io by bociKond */ 
 .bodyloginPage {
-  background-image: url('Login.jpg'); /* เปลี่ยนเป็นเส้นทางของรูปภาพ */
+  background-image: url('step-solutions-logo-2.jpg'); /* เปลี่ยนเป็นเส้นทางของรูปภาพ */
   background-size: cover; /* ทำให้รูปภาพเต็มพื้นที่ */
   background-position: center; /* จัดตำแหน่งรูปภาพให้อยู่กลาง */
   background-repeat: no-repeat; /* ไม่ให้รูปภาพซ้ำ */
 }
 .form h2 {
-  color: #58bc82; /* เปลี่ยนสีของข้อความที่นี่ */
+  color: #efefef; /* เปลี่ยนสีของข้อความที่นี่ */
 }
 .form {
-  background-color: #0e414e;
-  --bg-light: #efefef;
+  background-color: rgba(20, 33, 36, 0.9);;
+  --bg-light: #ffffff;
   --bg-dark: #707070;
-  --clr: #58bc82;
-  --clr-alpha: #9c9c9c60;
+  --clr: #f9fcfa;
+  --clr-alpha: #9e959560;
   display: flex;
   flex-direction: column;
   align-items: center;

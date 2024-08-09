@@ -23,7 +23,7 @@ const AddEmployee = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post('http://localhost:3000/auth/add_employee', employee)
+        axios.post('http://172.16.252.120:3000/auth/add_employee', employee)
             .then(result => {
                 if (result.data.Status) {
                     alert("เพิ่มข้อมูลพนักงานเรียบร้อยแล้ว");
