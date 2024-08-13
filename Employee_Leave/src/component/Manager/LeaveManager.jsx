@@ -37,10 +37,10 @@ const LeaveManager = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let updatedLeaveData = { ...leaveData };
+        let updatedLeaveData = { ...leaveData, employee_name: employee.name, employee_department: employee.department, employee_username: employee.username }; // เก็บชื่อพนักงานใน leaveData
 
         // ตรวจสอบประเภทการลา
-        if (leaveData.leave_type === 'ลาป่วย' || leaveData.leave_type === 'ลากิจ') {
+        if (leaveData.leave_type === 'ลาป่วย' || leaveData.leave_type === 'ลากิจ'|| leaveData.leave_type === 'without pay') {
             updatedLeaveData.manager_approver = 'อนุมัติ';
         }
 
@@ -77,6 +77,7 @@ const LeaveManager = () => {
                             </div>
                             <div className="d-flex justify-content-between">
                                 <p><strong>จำนวนลาเพื่อดูแลบุพการี:</strong> {employee.parent_leave} วัน</p>
+                                <p><strong>Without Pay</strong> {employee.withoutpay_leave} วัน</p>
                             </div>
                         </div>
                     </div>
@@ -99,7 +100,7 @@ const LeaveManager = () => {
                                     <option value="ลากิจ">ลากิจ</option>
                                     <option value="ลาพักร้อน">ลาพักร้อน</option>
                                     <option value="ลาเพื่อดูแลบุพการี">ลาเพื่อดูแลบุพการี</option>
-                                    <option value="with outpay">with outpay</option>
+                                    <option value="without pay">without pay</option>
                                 </select>
                             </div>
                             <div className="col-md-6">
@@ -161,7 +162,7 @@ const LeaveManager = () => {
                                     className="form-control"
                                     value={leaveData.reason}
                                     onChange={e => setLeaveData({ ...leaveData, reason: e.target.value })}
-                                     />
+                                />
                             </div>
                             <div className="col-12">
                                 <button type="submit" className="btn btn-primary w-100">ยืนยัน</button>

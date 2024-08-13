@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {
             const user = result[0];
             const token = jwt.sign({ role: user.role, username: user.username }, "jwt_secret_key", { expiresIn: '1d' });
             res.cookie('token', token);
-            return res.json({ loginStatus: true, role: user.role, id: user.id  })
+            return res.json({ loginStatus: true, role: user.role, id: user.id })
         } else {
             return res.json({ loginStatus: false, Error: "Wrong username or password" })
         }
@@ -79,7 +79,7 @@ router.post('/login', (req, res) => {
 //------------------employee-------------------//
 
 router.post('/add_employee', (req, res) => {
-    const sql = `INSERT INTO employees (username,name,password,start_date,department,sick_leave,holidays_leave,absence_leave,parent_leave,role) VALUES (?)`;
+    const sql = `INSERT INTO employees (username,name,password,start_date,department,sick_leave,holidays_leave,absence_leave,parent_leave,withoutpay_leave,role) VALUES (?)`;
 
     const values = [
         req.body.username,
@@ -91,6 +91,7 @@ router.post('/add_employee', (req, res) => {
         req.body.holidays_leave,
         req.body.absence_leave,
         req.body.parent_leave,
+        req.body.withoutpay_leave,
         req.body.role
     ];
 
@@ -120,10 +121,12 @@ router.get('/employee/:id', (req, res) => {
 
 
 router.put('/edit_employee/:id', (req, res) => {
-
     const id = req.params.id;
-    const sql = `UPDATE employees set username=?, name=?, start_date=?, department=?, sick_leave=?, 
-    holidays_leave=?, absence_leave=?, parent_leave=?, role=? WHERE id = ?`;
+
+    // SQL query to update employees table
+    const sqlUpdateEmployee = `UPDATE employees SET username=?, name=?, start_date=?, department=?, 
+    sick_leave=?, holidays_leave=?, absence_leave=?, parent_leave=?, withoutpay_leave=?, role=? WHERE id = ?`;
+
     const values = [
         req.body.username,
         req.body.name,
@@ -133,13 +136,25 @@ router.put('/edit_employee/:id', (req, res) => {
         req.body.holidays_leave,
         req.body.absence_leave,
         req.body.parent_leave,
+        req.body.withoutpay_leave,
         req.body.role
-    ]
-    connect.query(sql, [...values, id], (err, result) => {
-        if (err) return res.json({ Status: false, Error: "Query Error" + err })
-        return res.json({ Status: true, Result: result })
-    })
-})
+    ];
+
+    connect.query(sqlUpdateEmployee, [...values, id], (err, result) => {
+        if (err) return res.json({ Status: false, Error: "Query Error: " + err });
+
+        // SQL query to update leaves table
+        const sqlUpdateLeaves = `UPDATE leaves SET employee_username=?, employee_name=?, employee_department=? WHERE employee_id=?`;
+
+        // Use the employee's username and name to update the leaves
+        connect.query(sqlUpdateLeaves, [req.body.username, req.body.name, req.body.department, id], (err) => {
+            if (err) return res.json({ Status: false, Error: "Query Error for leaves: " + err });
+
+            return res.json({ Status: true, Result: result });
+        });
+    });
+});
+
 
 router.delete('/delete_employee/:id', (req, res) => {
     const id = req.params.id;
@@ -167,9 +182,9 @@ router.get('/manager_count', (req, res) => {
 });
 
 
-router.get('/history', (req,res) => {
+router.get('/history', (req, res) => {
     const sql = "SELECT * FROM leaves"
-    connect.query(sql,  (err, result) => {
+    connect.query(sql, (err, result) => {
         if (err) return res.json({ Status: false, Error: "Query Error" + err })
         return res.json({ Status: true, Result: result })
     })
@@ -177,9 +192,9 @@ router.get('/history', (req,res) => {
 })
 //------------------End Employee-------------------//
 
-router.get('/logout', (req,res) => {
+router.get('/logout', (req, res) => {
     res.clearCookie('token')
-    return res.json({Status: true})
+    return res.json({ Status: true })
 })
 
 export { router as adminRouter }

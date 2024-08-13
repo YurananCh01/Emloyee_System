@@ -2,9 +2,6 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-
-
-
 const EditEmployee = () => {
     const { id } = useParams()
     const [employee, setEmployee] = useState({
@@ -16,6 +13,7 @@ const EditEmployee = () => {
         holidays_leave: '0',
         absence_leave: '0',
         parent_leave: '0',
+        withoutpay_leave: '0',
         role: ''
 
     })
@@ -35,6 +33,7 @@ const EditEmployee = () => {
                     holidays_leave: result.data.Result[0].holidays_leave,
                     absence_leave: result.data.Result[0].absence_leave,
                     parent_leave: result.data.Result[0].parent_leave,
+                    withoutpay_leave: result.data.Result[0]. withoutpay_leave,
                     role: result.data.Result[0].role,
                 });
             }).catch(err => console.log(err));
@@ -132,6 +131,13 @@ const EditEmployee = () => {
                             className='form-control rounded-0'
                             value={employee.parent_leave}
                             onChange={(e) => setEmployee({ ...employee, parent_leave: e.target.value })} required/>
+                    </div>
+                    <div className='col-12'>
+                        <label htmlFor='inputWihtoutpay' className='form-label'>Without Pay</label>
+                        <input type='text'
+                            className='form-control rounded-0'
+                            value={employee.withoutpay_leave}
+                            onChange={(e) => setEmployee({ ...employee, withoutpay_leave: e.target.value })} />
                     </div>
                     <div className='col-12'>
                         <label htmlFor='inputRole' className='form-label'>ตำแหน่งพนักงาน</label>

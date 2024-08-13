@@ -73,6 +73,7 @@ const Employee = () => {
                             <th>จำนวนลาพักร้อนทั้งหมด</th>
                             <th>จำนวนลากิจทั้งหมด</th>
                             <th>จำนวนลาเพื่อดูแลบุพการี (พ่อ แม่ และลูก)</th>
+                            <th>Without Pay</th>
                             <th>บทบาทพนักงาน</th>
                             <th>การกระทำ</th>
                         </tr>
@@ -88,6 +89,7 @@ const Employee = () => {
                                 <td>{e.holidays_leave}</td>
                                 <td>{e.absence_leave}</td>
                                 <td>{e.parent_leave}</td>
+                                <td>{e.withoutpay_leave}</td>
                                 <td>{e.role}</td>
                                 <td>
                                     <Link to={`/dashboard/edit_employee/` + e.id} className='btn btn-warning btn-sm me-2'>แก้ไข</Link>

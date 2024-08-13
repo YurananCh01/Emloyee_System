@@ -75,14 +75,14 @@ const HistoryLeave = () => {
     //========================== export excel ===========================================
     const exportToExcel = () => {
         const formattedData = filteredData.map(leave => ({
-            'รหัสพนักงาน': leave.username,
-            'ชื่อ - นามสกุล': leave.name,
+            'รหัสพนักงาน': leave.employee_username,
+            'ชื่อ - นามสกุล': leave.employee_name,
             'ประเภทการลา': leave.leave_type,
             'วันที่เริ่มต้น': formatDate(leave.start_date),
             'เวลาเริ่มลา' : (leave.start_time),
             'วันที่สิ้นสุด': formatDate(leave.end_date),
             'เวลาสิ้นสุดการลา' : (leave.end_time),
-            'แผนกพนักงาน': leave.department,
+            'แผนกพนักงาน': leave.employee_department,
             'จำนวนวันลา': leave.leave_days,
             'การอนุมัติ': leave.manager_approver
 
@@ -188,14 +188,14 @@ const HistoryLeave = () => {
                     <tbody>
                         {filteredData.map((leave, index) => (
                             <tr key={index}>
-                                <td>{leave.username}</td>
-                                <td>{leave.name}</td>
+                                <td>{leave.employee_username}</td>
+                                <td>{leave.employee_name}</td>
                                 <td>{leave.leave_type}</td>
                                 <td>{formatDate(leave.start_date)}</td>
                                 <td>{leave.start_time}</td>
                                 <td>{formatDate(leave.end_date)}</td>
                                 <td>{leave.end_time}</td>
-                                <td>{leave.department}</td>
+                                <td>{leave.employee_department}</td>
                                 <td>{leave.leave_days}</td>
                                 <td>{leave.manager_approver}</td>
                             </tr>
