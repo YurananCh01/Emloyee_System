@@ -19,7 +19,7 @@ const LeaveManager = () => {
     });
 
     useEffect(() => {
-        axios.get('http://172.16.252.120:3000/employee/detail/' + id)
+        axios.get('http://192.168.59.1:3000/employee/detail/' + id)
             .then(result => {
                 if (result.data.loginStatus) {
                     setEmployee(result.data.data);
@@ -44,7 +44,7 @@ const LeaveManager = () => {
             updatedLeaveData.manager_approver = 'อนุมัติ';
         }
 
-        axios.post('http://172.16.252.120:3000/leave/add_leave', updatedLeaveData)
+        axios.post('http://192.168.59.1:3000/leave/add_leave', updatedLeaveData)
             .then(result => {
                 alert("เพิ่มข้อมูลการลาเรียบร้อยแล้ว");
                 window.location.reload();
@@ -99,6 +99,7 @@ const LeaveManager = () => {
                                     <option value="ลากิจ">ลากิจ</option>
                                     <option value="ลาพักร้อน">ลาพักร้อน</option>
                                     <option value="ลาเพื่อดูแลบุพการี">ลาเพื่อดูแลบุพการี</option>
+                                    <option value="with outpay">with outpay</option>
                                 </select>
                             </div>
                             <div className="col-md-6">
@@ -160,7 +161,7 @@ const LeaveManager = () => {
                                     className="form-control"
                                     value={leaveData.reason}
                                     onChange={e => setLeaveData({ ...leaveData, reason: e.target.value })}
-                                    required />
+                                     />
                             </div>
                             <div className="col-12">
                                 <button type="submit" className="btn btn-primary w-100">ยืนยัน</button>

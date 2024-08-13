@@ -11,7 +11,7 @@ const Home = () => {
   }, []);
 
   const employeeCount = () => {
-    axios.get('http://172.16.252.120:3000/auth/employee_count')
+    axios.get('http://192.168.59.1:3000/auth/employee_count')
       .then(result => {
         if (result.data.Status) {
           setEmployeeCount(result.data.Result[0].employee_count);
@@ -21,7 +21,7 @@ const Home = () => {
   };
 
   const managerCount = () => {
-    axios.get('http://172.16.252.120:3000/auth/manager_count')
+    axios.get('http://192.168.59.1:3000/auth/manager_count')
       .then(result => {
         if (result.data.Status) {
           setManagerCount(result.data.Result[0].manager_count);

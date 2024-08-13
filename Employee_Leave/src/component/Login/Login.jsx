@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post('http://172.16.252.120:3000/auth/login', values);
+      const result = await axios.post('http://192.168.59.1:3000/auth/login', values);
       console.log(result.data);
       const { role, id, loginStatus, Error } = result.data;
 

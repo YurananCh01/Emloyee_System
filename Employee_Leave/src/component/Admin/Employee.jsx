@@ -8,18 +8,20 @@ const Employee = () => {
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บค่าช่องค้นหา
 
     useEffect(() => {
-        axios.get('http://172.16.252.120:3000/auth/employee')
+        axios.get('http://192.168.59.1:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
-                    setEmployee(result.data.Result);
+                    // เรียงลำดับข้อมูลพนักงานตามวันที่เริ่มทำงาน
+                    const sortedEmployees = result.data.Result.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
+                    setEmployee(sortedEmployees);
                 } else {
                     alert(result.data.Error);
                 }
             }).catch(err => console.log(err));
     }, []);
-
+    
     const handleDelete = (id) => {
-        axios.delete('http://172.16.252.120:3000/auth/delete_employee/' + id)
+        axios.delete('http://192.168.59.1:3000/auth/delete_employee/' + id)
             .then(result => {
                 if (result.data.Status) {
                     window.location.reload();
