@@ -93,7 +93,7 @@ const Employee = () => {
                                 <td>{e.role}</td>
                                 <td>
                                     <Link to={`/dashboard/edit_employee/` + e.id} className='btn btn-warning btn-sm me-2'>แก้ไข</Link>
-                                    <button className='btn btn-danger btn-sm' onClick={() => handleDelete(e.id)}>ลบ</button>
+                                    <button className='btn btn-danger btn-sm ' onClick={() => handleDelete(e.id)}>ลบ</button>
                                 </td>
                             </tr>
                         ))}

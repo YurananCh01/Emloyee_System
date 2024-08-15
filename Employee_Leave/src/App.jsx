@@ -16,6 +16,7 @@ import HistoryEmployee from './component/Employee/HistoryEmployee.jsx';
 import HistoryEmployeeDepartment from './component/Manager/HistoryEmployeeDepartment.jsx';
 import { AuthProvider, useAuth } from './AuthContext';
 import LeaveManager from './component/Manager/LeaveManager.jsx';
+import ResetPassword from './component/Employee/resetPassword.jsx';
 
 const PrivateRoute = ({ children, role }) => {
   const { role: userRole } = useAuth();
@@ -36,6 +37,7 @@ function App() {
           <Route path="/dashboardEmployee" element={<PrivateRoute role="employee"><DashboardEmployee /></PrivateRoute>}>
             <Route path="/dashboardEmployee/employee_detail/:id" element={<EmployeeDetail />} />
             <Route path="/dashboardEmployee/history_employee/:id" element={<HistoryEmployee />} />
+            <Route path="/dashboardEmployee/resetPassword/:id" element={<ResetPassword />} />
           </Route>
           
           {/* manager */}
@@ -43,6 +45,7 @@ function App() {
           <Route path="/dashboardManager/manager_leave/:id" element={<LeaveManager />} />
             <Route path="/dashboardManager/manager_detail/:id" element={<ManagerDetail />} />
             <Route path="/dashboardManager/history_employee_department/:id" element={<HistoryEmployeeDepartment />} />
+            <Route path="/dashboardManager/resetPassword/:id" element={<ResetPassword />} />
           </Route>
           
           {/* admin */}

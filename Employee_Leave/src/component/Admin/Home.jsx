@@ -49,6 +49,14 @@ const Home = () => {
             </div>
           </div>
         </div>
+        <div className='col-md-4'>
+          <div className='card text-center shadow-sm'>
+            <div className='card-body'>
+              <h4 className='card-title'>รวมพนักงานทั้งหมด</h4>
+              <h5 className='card-text'>จำนวน: {managerTotal+employeeTotal} คน</h5>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

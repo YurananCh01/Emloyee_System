@@ -22,7 +22,6 @@ const EditEmployee = () => {
     useEffect(() => {
         axios.get('http://192.168.59.1:3000/auth/employee/'+ id)
             .then(result => {
-                console.log(result.data.Result);
                 setEmployee({
                     ...employee,
                     username: result.data.Result[0].username,

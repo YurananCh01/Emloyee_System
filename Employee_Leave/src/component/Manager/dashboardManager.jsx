@@ -79,6 +79,12 @@ const dashboardManager = () => {
                   <span className='ms-2 d-none d-sm-inline'>ประวัติการลาของพนักงาน</span>
                 </Link>
               </li>
+              <li className='w-100'>
+                <Link to={`/dashboardManager/resetPassword/${manager ? manager.id : ''}`} className='nav-link text-white'>
+                  <i className="fs-4 bi-file-lock2-fill ms-2"></i>
+                  <span className='ms-2 d-none d-sm-inline'>เปลี่ยนรหัสผ่าน</span>
+                </Link>
+              </li>
               <li className='w-100' onClick={handleLogout}>
                 <Link className='nav-link text-white'>
                   <i className="fs-4 bi-power ms-2"></i>
