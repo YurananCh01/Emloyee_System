@@ -40,7 +40,7 @@ const EmployeeDetail = () => {
     let updatedLeaveData = { ...leaveData, employee_name: employee.name, employee_department: employee.department, employee_username: employee.username }; // เก็บชื่อพนักงานใน leaveData
 
     // ตรวจสอบประเภทการลา
-    if (leaveData.leave_type === 'ลาป่วย' || leaveData.leave_type === 'ลากิจ') {
+    if (leaveData.leave_type === 'ลาป่วย' || leaveData.leave_type === 'ลากิจ' || leaveData.leave_type === 'without pay') {
       updatedLeaveData.manager_approver = 'อนุมัติ';
     }
 

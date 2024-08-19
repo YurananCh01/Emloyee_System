@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const ManagerDetail = () => {
     const [manager, setManager] = useState(null);
@@ -83,6 +83,8 @@ const ManagerDetail = () => {
                                 return { ...emp, absence_leave: emp.absence_leave - leave.leave_days };
                             case 'ลาเพื่อดูแลบุพการี':
                                 return { ...emp, parent_leave: emp.parent_leave - leave.leave_days };
+                            case 'without pay':
+                                return { ...emp, withoutpay_leave: emp.withoutpay_leave - leave.leave_days };
                             default:
                                 return emp;
                         }

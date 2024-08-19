@@ -15,9 +15,7 @@ const EditEmployee = () => {
         parent_leave: '0',
         withoutpay_leave: '0',
         role: ''
-
     })
-
 
     useEffect(() => {
         axios.get('http://192.168.59.1:3000/auth/employee/'+ id)
@@ -32,27 +30,29 @@ const EditEmployee = () => {
                     holidays_leave: result.data.Result[0].holidays_leave,
                     absence_leave: result.data.Result[0].absence_leave,
                     parent_leave: result.data.Result[0].parent_leave,
-                    withoutpay_leave: result.data.Result[0]. withoutpay_leave,
+                    withoutpay_leave: result.data.Result[0].withoutpay_leave,
                     role: result.data.Result[0].role,
                 });
             }).catch(err => console.log(err));
-
     }, []);
 
-
     const navigate = useNavigate();
+
     const handleSubmit = (e) => {
-        e.preventDefault()
-        axios.put('http://192.168.59.1:3000/auth/edit_employee/' + id, employee, {
-            start_date: employee.start_date.substring(0, 10)
-        }).then(result => {
+        e.preventDefault();
+        
+        const confirmEdit = window.confirm('คุณต้องการบันทึกการแก้ไขข้อมูลพนักงานนี้ใช่หรือไม่?');
+        if (confirmEdit) {
+            axios.put('http://192.168.59.1:3000/auth/edit_employee/' + id, employee, {
+                start_date: employee.start_date.substring(0, 10)
+            }).then(result => {
                 if (result.data.Status) {
-                    navigate('/dashboard/employee')
+                    navigate('/dashboard/employee');
+                } else {
+                    alert(result.data.Error);
                 }
-                else {
-                    alert(result.data.Error)
-                }
-            }).catch(err => console.log(err))
+            }).catch(err => console.log(err));
+        }
     }
 
     return (
@@ -60,6 +60,7 @@ const EditEmployee = () => {
             <div className='p-3 rounded w-25 border'>
                 <h3>แก้ไขข้อมูลพนักงาน</h3>
                 <form className='row g-1' onSubmit={handleSubmit}>
+                    {/* รายละเอียดของฟอร์ม */}
                     <div className='col-12'>
                         <label htmlFor='inputId' className='form-label'>กรอกรหัสพนักงาน</label>
                         <input type='id' placeholder='รหัสพนักงาน'
@@ -100,7 +101,6 @@ const EditEmployee = () => {
                             <option value='R&D'>R&D</option>
                             <option value='Production'>Production</option>   
                             <option value='ACCOUNTANT'>ACCOUNTANT</option>          
-                            
                         </select>
                     </div>
                     <div className='col-12'>
@@ -151,18 +151,15 @@ const EditEmployee = () => {
                             <option value='admin'>admin</option>
                             <option value='manager'>manager</option>
                             <option value='employee'>employee</option> 
-                            
                         </select>
                     </div>
                     <div className='col-12'>
                         <button type='submit' className='btn btn-primary w-100'>Edit Employee</button>
                     </div>
-
                 </form>
             </div>
         </div>
     )
-
 }
 
-export default EditEmployee
+export default EditEmployee;

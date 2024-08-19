@@ -48,6 +48,21 @@ router.put('/reset_password/:id', (req, res) => {
         }
     });
 });
+router.get('/history_employee/:id', (req, res) => {
+    const id = req.params.id;
+    const sql = "SELECT * FROM leaves WHERE employee_id = ?";
+    connect.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Query error:", err);
+            return res.json({ historyStatus: false, Error: "Query error" });
+        }
+        if (result.length > 0) {
+            return res.json({ historyStatus: true, data: result });
+        } else {
+            return res.json({ historyStatus: false, Error: "Employee not found" });
+        }
+    });
+});
 
 
 router.put('/reset_password/:id', (req,res) => {

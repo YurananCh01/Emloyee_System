@@ -58,10 +58,9 @@ const HistoryLeave = () => {
         const start = startDate ? setToMidnight(new Date(startDate)) : null;
         const end = endDate ? setToMidnight(new Date(endDate)) : null;
 
-
         const matchesDateRange = (!start || leaveStartDate >= start) && (!end || leaveEndDate <= end)
-        const matchesDepartment = !department || leave.department === department;
-        console.log(start)
+        const matchesDepartment =  !department || leave.employee_department === department;
+
         return matchesDateRange && matchesDepartment;
 
     });
@@ -108,7 +107,7 @@ const HistoryLeave = () => {
 
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, 'HistoryLeave');
-        XLSX.writeFile(workbook, 'history_leave.xlsx');
+        XLSX.writeFile(workbook, 'ประวัติการลา.xlsx');
     };
     //========================== end export =============================================
     const formatDate = (dateString) => {

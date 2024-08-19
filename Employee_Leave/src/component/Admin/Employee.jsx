@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Employee = () => {
-
     const [employee, setEmployee] = useState([]);
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บค่าช่องค้นหา
 
@@ -21,14 +20,17 @@ const Employee = () => {
     }, []);
     
     const handleDelete = (id) => {
-        axios.delete('http://192.168.59.1:3000/auth/delete_employee/' + id)
-            .then(result => {
-                if (result.data.Status) {
-                    window.location.reload();
-                } else {
-                    alert(result.data.Error);
-                }
-            });
+        const confirmDelete = window.confirm('คุณต้องการลบพนักงานคนนี้ใช่หรือไม่?');
+        if (confirmDelete) {
+            axios.delete('http://192.168.59.1:3000/auth/delete_employee/' + id)
+                .then(result => {
+                    if (result.data.Status) {
+                        window.location.reload();
+                    } else {
+                        alert(result.data.Error);
+                    }
+                });
+        }
     };
 
     const formatDate = (dateString) => {
@@ -44,6 +46,7 @@ const Employee = () => {
     const clearSearch = () => {
         setSearchTerm('');
     };
+
     return (
         <div className='px-5 mt-3'>
             <div className='d-flex justify-content-center'>
@@ -92,8 +95,13 @@ const Employee = () => {
                                 <td>{e.withoutpay_leave}</td>
                                 <td>{e.role}</td>
                                 <td>
-                                    <Link to={`/dashboard/edit_employee/` + e.id} className='btn btn-warning btn-sm me-2'>แก้ไข</Link>
-                                    <button className='btn btn-danger btn-sm ' onClick={() => handleDelete(e.id)}>ลบ</button>
+                                    <Link
+                                        to={`/dashboard/edit_employee/` + e.id}
+                                        className='btn btn-warning btn-sm me-2'
+                                    >
+                                        แก้ไข
+                                    </Link>
+                                    <button className='btn btn-danger btn-sm' onClick={() => handleDelete(e.id)}>ลบ</button>
                                 </td>
                             </tr>
                         ))}
@@ -102,6 +110,6 @@ const Employee = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Employee;
