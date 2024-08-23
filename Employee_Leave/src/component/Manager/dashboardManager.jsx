@@ -21,7 +21,7 @@ const dashboardManager = () => {
     }
 
     // ดึงข้อมูลผู้จัดการ
-    axios.get(`http://192.168.59.1:3000/manager/manager_detail/${id}`)
+    axios.get(`http://172.16.251.92:3000/manager/manager_detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setManager(result.data.data);
@@ -37,7 +37,7 @@ const dashboardManager = () => {
   }, [id, role, navigate]);
 
   const handleLogout = () => {
-    axios.get('http://192.168.59.1:3000/manager/logout')
+    axios.get('http://172.16.251.92:3000/manager/logout')
       .then(result => {
         if (result.data.Status) {
           logout();

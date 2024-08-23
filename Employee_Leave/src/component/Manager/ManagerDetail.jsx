@@ -12,7 +12,7 @@ const ManagerDetail = () => {
         // Function to fetch manager details
         const fetchManagerDetails = async () => {
             try {
-                const response = await axios.get(`http://192.168.59.1:3000/manager/manager_detail/${id}`);
+                const response = await axios.get(`http://172.16.251.92:3000/manager/manager_detail/${id}`);
                 if (response.data.loginStatus) {
                     setManager(response.data.data);
                 } else {
@@ -26,7 +26,7 @@ const ManagerDetail = () => {
         // Function to fetch leave requests
         const fetchLeaveRequests = async () => {
             try {
-                const response = await axios.get('http://192.168.59.1:3000/leave/leaves');
+                const response = await axios.get('http://172.16.251.92:3000/leave/leaves');
                 if (response.data.Status) {
                     setLeaves(response.data.Result);
                 } else {
@@ -40,7 +40,7 @@ const ManagerDetail = () => {
         // Function to fetch employees
         const fetchEmployees = async () => {
             try {
-                const response = await axios.get('http://192.168.59.1:3000/auth/employee');
+                const response = await axios.get('http://172.16.251.92:3000/auth/employee');
                 if (response.data.Status) {
                     setEmployees(response.data.Result);
                 } else {
@@ -59,7 +59,7 @@ const ManagerDetail = () => {
 
 
     const handleApprove = (leave) => {
-        axios.put('http://192.168.59.1:3000/manager/approve_leave', {
+        axios.put('http://172.16.251.92:3000/manager/approve_leave', {
             leave_id: leave.id,
             employee_id: leave.employee_id,
             leave_type: leave.leave_type,
@@ -99,7 +99,7 @@ const ManagerDetail = () => {
     };
 
     const handleReject = (leave_id) => {
-        axios.put('http://192.168.59.1:3000/manager/reject_leave', { leave_id })
+        axios.put('http://172.16.251.92:3000/manager/reject_leave', { leave_id })
             .then(result => {
                 if (result.data.Status) {
                     alert('การลาไม่ได้รับการอนุมัติ');

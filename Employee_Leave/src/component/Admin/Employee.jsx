@@ -7,7 +7,7 @@ const Employee = () => {
     const [searchTerm, setSearchTerm] = useState(''); // State สำหรับเก็บค่าช่องค้นหา
 
     useEffect(() => {
-        axios.get('http://192.168.59.1:3000/auth/employee')
+        axios.get('http://172.16.251.92:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
                     // เรียงลำดับข้อมูลพนักงานตามวันที่เริ่มทำงาน
@@ -22,7 +22,7 @@ const Employee = () => {
     const handleDelete = (id) => {
         const confirmDelete = window.confirm('คุณต้องการลบพนักงานคนนี้ใช่หรือไม่?');
         if (confirmDelete) {
-            axios.delete('http://192.168.59.1:3000/auth/delete_employee/' + id)
+            axios.delete('http://172.16.251.92:3000/auth/delete_employee/' + id)
                 .then(result => {
                     if (result.data.Status) {
                         window.location.reload();
@@ -78,7 +78,7 @@ const Employee = () => {
                             <th>จำนวนลาเพื่อดูแลบุพการี (พ่อ แม่ และลูก)</th>
                             <th>Without Pay</th>
                             <th>บทบาทพนักงาน</th>
-                            <th>การกระทำ</th>
+                            <th>ลบ/แก้ไข</th>
                         </tr>
                     </thead>
                     <tbody>

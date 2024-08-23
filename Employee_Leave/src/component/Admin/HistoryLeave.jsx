@@ -12,7 +12,7 @@ const HistoryLeave = () => {
     const [department, setDepartment] = useState('');
 
     useEffect(() => {
-        axios.get('http://192.168.59.1:3000/auth/history')
+        axios.get('http://172.16.251.92:3000/auth/history')
             .then(result => {
                 if (result.data.Status) {
                     setLeaves(result.data.Result);
@@ -21,7 +21,7 @@ const HistoryLeave = () => {
                 }
             }).catch(err => console.log(err));
 
-        axios.get('http://192.168.59.1:3000/auth/employee')
+        axios.get('http://172.16.251.92:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
                     setEmployees(result.data.Result);
@@ -33,7 +33,6 @@ const HistoryLeave = () => {
 
     }, []);
     useEffect(() => {
-        // Combine leaves and employees data based on username
         if (leaves.length > 0 && employees.length > 0) {
             const combined = leaves.map(leave => {
                 const employee = employees.find(emp => emp.id === leave.employee_id);
@@ -44,6 +43,7 @@ const HistoryLeave = () => {
                     department: employee ? employee.department : 'ไม่พบแผนก'
                 };
             });
+            combined.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
             setCombinedData(combined);
         }
     }, [leaves, employees]);

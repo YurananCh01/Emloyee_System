@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }
     const timeout = setTimeout(() => {
       logout();
-      alert("คุณถูกล็อกเอาต์เนื่องจากไม่มีการใช้งาน");
+      alert("คุณถูก Logout เนื่องจากไม่มีการใช้งาน");
     }, 30 * 60 * 1000); // 30 นาที
     setLogoutTimeout(timeout);
   };

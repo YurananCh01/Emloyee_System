@@ -14,7 +14,7 @@ const ResetPassword = () => {
     const [showconfirmPassword, setShowconfirmPassword] = useState(false);
 
     useEffect(() => {
-        axios.get(`http://192.168.59.1:3000/employee/detail/${id}`)
+        axios.get(`http://172.16.251.92:3000/employee/detail/${id}`)
             .then(result => {
                 setEmployee({
                     ...employee,
@@ -31,7 +31,7 @@ const ResetPassword = () => {
             return;
         }
 
-        axios.put(`http://192.168.59.1:3000/employee/reset_password/${id}`, { password: newPassword })
+        axios.put(`http://172.16.251.92:3000/employee/reset_password/${id}`, { password: newPassword })
             .then(response => {
                 if (response.data.Status) {
                     alert("รีเซ็ตรหัสผ่านเรียบร้อยแล้ว");

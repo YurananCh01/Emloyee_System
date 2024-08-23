@@ -6,7 +6,7 @@ const HistoryEmployee = () => {
   const [employee, setEmployee] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    axios.get('http://192.168.59.1:3000/employee/history_employee/' + id)
+    axios.get('http://172.16.251.92:3000/employee/history_employee/' + id)
       .then(result => {
         if (result.data) {
           const sortedLeaves = result.data.data.sort((a, b) => b.id - a.id);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useParams, useNavigate } from 'react-router-dom';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import '../style.css';
+import './Employee.css';
 import axios from 'axios';
 import { useAuth } from '../../AuthContext';
 import logo from '../../assets/logo-step2.png';
@@ -19,7 +19,7 @@ const DashboardEmployee = () => {
     }
 
     // ดึงข้อมูลพนักงาน
-    axios.get(`http://192.168.59.1:3000/employee/detail/${id}`)
+    axios.get(`http://172.16.251.92:3000/employee/detail/${id}`)
       .then(result => {
         if (result.data.loginStatus) {
           setEmployee(result.data.data);
@@ -35,7 +35,7 @@ const DashboardEmployee = () => {
   }, [id, role, navigate]);
 
   const handleLogout = () => {
-    axios.get('http://192.168.59.1:3000/employee/logout')
+    axios.get('http://172.16.251.92:3000/employee/logout')
       .then(result => {
         if (result.data.Status) {
           logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext

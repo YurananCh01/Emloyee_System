@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 
 const HistoryLeave = () => {
-    const { id } = useParams(); // ดึง ID ของผู้ใช้ปัจจุบันจาก URL
+    const { id } = useParams(); // get id
     const [leaves, setLeaves] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [combinedData, setCombinedData] = useState([]);
@@ -14,7 +14,7 @@ const HistoryLeave = () => {
 
     useEffect(() => {
         // ดึงข้อมูลผู้จัดการปัจจุบัน
-        axios.get(`http://192.168.59.1:3000/manager/manager_detail/${id}`)
+        axios.get(`http://172.16.251.92:3000/manager/manager_detail/${id}`)
             .then(result => {
                 if (result.data.loginStatus) {
                     const currentUser = result.data.data;
@@ -25,7 +25,7 @@ const HistoryLeave = () => {
             }).catch(err => console.log(err));
 
         // ดึงข้อมูลการลา
-        axios.get('http://192.168.59.1:3000/auth/history')
+        axios.get('http://172.16.251.92:3000/auth/history')
             .then(result => {
                 if (result.data.Status) {
                     setLeaves(result.data.Result);
@@ -35,7 +35,7 @@ const HistoryLeave = () => {
             }).catch(err => console.log(err));
 
         // ดึงข้อมูลพนักงาน
-        axios.get('http://192.168.59.1:3000/auth/employee')
+        axios.get('http://172.16.251.92:3000/auth/employee')
             .then(result => {
                 if (result.data.Status) {
                     setEmployees(result.data.Result);

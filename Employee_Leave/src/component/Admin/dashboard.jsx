@@ -13,7 +13,7 @@ const Dashboard = () => {
   axios.defaults.withCredentials = true;
 
   const handleLogout = () => {
-    axios.get('http://192.168.59.1:3000/auth/logout')
+    axios.get('http://172.16.251.92:3000/auth/logout')
       .then(result => {
         if (result.data.Status) {
           logout(); // เรียกใช้ฟังก์ชัน logout จาก AuthContext

@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 const LeaveManager = () => {
     const [employee, setEmployee] = useState(null);
     const { id } = useParams();
-    const navigate = useNavigate();
     const [leaveData, setLeaveData] = useState({
         employee_id: id,
         leave_type: '',
@@ -19,7 +18,7 @@ const LeaveManager = () => {
     });
 
     useEffect(() => {
-        axios.get('http://192.168.59.1:3000/employee/detail/' + id)
+        axios.get('http://172.16.251.92:3000/employee/detail/' + id)
             .then(result => {
                 if (result.data.loginStatus) {
                     setEmployee(result.data.data);
@@ -44,7 +43,7 @@ const LeaveManager = () => {
             updatedLeaveData.manager_approver = 'อนุมัติ';
         }
 
-        axios.post('http://192.168.59.1:3000/leave/add_leave', updatedLeaveData)
+        axios.post('http://172.16.251.92:3000/leave/add_leave', updatedLeaveData)
             .then(result => {
                 alert("เพิ่มข้อมูลการลาเรียบร้อยแล้ว");
                 window.location.reload();

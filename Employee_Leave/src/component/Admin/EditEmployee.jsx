@@ -18,7 +18,7 @@ const EditEmployee = () => {
     })
 
     useEffect(() => {
-        axios.get('http://192.168.59.1:3000/auth/employee/'+ id)
+        axios.get('http://172.16.251.92:3000/auth/employee/'+ id)
             .then(result => {
                 setEmployee({
                     ...employee,
@@ -43,7 +43,7 @@ const EditEmployee = () => {
         
         const confirmEdit = window.confirm('คุณต้องการบันทึกการแก้ไขข้อมูลพนักงานนี้ใช่หรือไม่?');
         if (confirmEdit) {
-            axios.put('http://192.168.59.1:3000/auth/edit_employee/' + id, employee, {
+            axios.put('http://172.16.251.92:3000/auth/edit_employee/' + id, employee, {
                 start_date: employee.start_date.substring(0, 10)
             }).then(result => {
                 if (result.data.Status) {
