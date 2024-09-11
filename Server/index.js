@@ -7,7 +7,7 @@ import { LeaveRoute } from './Routes/LeaveRoute.js';
 
 const app = express();
 app.use(cors({
-    origin: ["http://172.16.251.92:5173"],
+    origin: ["http://localhost:5173"],
     methods: ['GET','POST','PUT','DELETE'],
     credentials: true
 }))
